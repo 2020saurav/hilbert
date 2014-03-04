@@ -1,0 +1,71 @@
+#! /usr/bin/vvp
+:ivl_version "0.9.5 " "(v0_9_5)";
+:vpi_time_precision + 0;
+:vpi_module "system";
+:vpi_module "v2005_math";
+:vpi_module "va_math";
+S_0x1beaf70 .scope module, "main" "main" 2 1;
+ .timescale 0 0;
+v0x1bff670_0 .var "a", 0 0;
+v0x1bff710_0 .var "b", 0 0;
+v0x1bff7c0_0 .var "cin", 0 0;
+v0x1bff870_0 .net "cout", 0 0, L_0x1bffa50; 1 drivers
+v0x1bff950_0 .var/i "i", 31 0;
+v0x1bff9d0_0 .net "s", 0 0, L_0x1bffaf0; 1 drivers
+E_0x1bcae60 .event edge, v0x1bff420_0, v0x1bff320_0, v0x1bff280_0;
+S_0x1beb060 .scope module, "dut" "fa" 2 12, 3 1, S_0x1beaf70;
+ .timescale 0 0;
+v0x1bebf10_0 .net *"_s10", 0 0, C4<0>; 1 drivers
+v0x1bfed80_0 .net *"_s11", 1 0, L_0x1bfff30; 1 drivers
+v0x1bfee20_0 .net *"_s13", 1 0, L_0x1c00140; 1 drivers
+v0x1bfeec0_0 .net *"_s16", 0 0, C4<0>; 1 drivers
+v0x1bfef70_0 .net *"_s17", 1 0, L_0x1c00300; 1 drivers
+v0x1bff010_0 .net *"_s3", 1 0, L_0x1bffc30; 1 drivers
+v0x1bff0f0_0 .net *"_s6", 0 0, C4<0>; 1 drivers
+v0x1bff190_0 .net *"_s7", 1 0, L_0x1bffdb0; 1 drivers
+v0x1bff280_0 .net "a", 0 0, v0x1bff670_0; 1 drivers
+v0x1bff320_0 .net "b", 0 0, v0x1bff710_0; 1 drivers
+v0x1bff420_0 .net "cin", 0 0, v0x1bff7c0_0; 1 drivers
+v0x1bff4c0_0 .alias "cout", 0 0, v0x1bff870_0;
+v0x1bff5d0_0 .alias "s", 0 0, v0x1bff9d0_0;
+L_0x1bffa50 .part L_0x1c00300, 1, 1;
+L_0x1bffaf0 .part L_0x1c00300, 0, 1;
+L_0x1bffc30 .concat [ 1 1 0 0], v0x1bff670_0, C4<0>;
+L_0x1bffdb0 .concat [ 1 1 0 0], v0x1bff710_0, C4<0>;
+L_0x1bfff30 .arith/sum 2, L_0x1bffc30, L_0x1bffdb0;
+L_0x1c00140 .concat [ 1 1 0 0], v0x1bff7c0_0, C4<0>;
+L_0x1c00300 .arith/sum 2, L_0x1bfff30, L_0x1c00140;
+    .scope S_0x1beaf70;
+T_0 ;
+    %set/v v0x1bff670_0, 0, 1;
+    %set/v v0x1bff710_0, 0, 1;
+    %set/v v0x1bff7c0_0, 0, 1;
+    %end;
+    .thread T_0;
+    .scope S_0x1beaf70;
+T_1 ;
+    %wait E_0x1bcae60;
+    %set/v v0x1bff950_0, 0, 32;
+T_1.0 ;
+    %load/v 8, v0x1bff950_0, 32;
+   %cmpi/s 8, 8, 32;
+    %jmp/0xz T_1.1, 5;
+    %delay 10, 0;
+    %load/v 8, v0x1bff950_0, 32;
+    %set/v v0x1bff7c0_0, 8, 1;
+    %set/v v0x1bff710_0, 9, 1;
+    %set/v v0x1bff670_0, 10, 1;
+    %vpi_call 2 28 "$monitor", "%t ns: a + b + cin = %b + %b + %b = cout sum = %b %b", $time, v0x1bff670_0, v0x1bff710_0, v0x1bff7c0_0, v0x1bff870_0, v0x1bff9d0_0;
+    %ix/load 0, 1, 0;
+    %load/vp0/s 8, v0x1bff950_0, 32;
+    %set/v v0x1bff950_0, 8, 32;
+    %jmp T_1.0;
+T_1.1 ;
+    %jmp T_1;
+    .thread T_1, $push;
+# The file index is used to find the file name in the following table.
+:file_names 4;
+    "N/A";
+    "<interactive>";
+    "fa_test.v";
+    "fa.v";
