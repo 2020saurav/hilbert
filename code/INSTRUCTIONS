@@ -1,0 +1,40 @@
+INSTRUCTIONS
+
+1. Keep the given input in input.txt
+1.5. Run s.py to change input order
+2. Run
+		python pre.py
+	
+	Collect output and put in binaryinput.py and run this:
+
+		python binaryinput.py > binput.txt
+
+3. Manually do +/- and pad the digits to 16 bits in binput.txt and put in inputr.bin
+4. inputc.bin will have all zeroes if the input given is real
+5. Run this:
+	iverilog -o final fft.v butterfly.v multiplier.v adder.v
+6. Run this:
+	vvp final > output.txt
+7. Run 
+	plotgen.py > hilbert.dat 
+			: It will parse output.txt and put values of X and Y axis in hilbert.dat
+8. Run
+	gnuplot plot.gp
+9. Open and display "final.gif" or any other file asked for.
+
+
+Implementation:
+
+1. Storing Numbers:
+	* Using a 16 bit representation
+	* First bit is sign bit, rest 15 used for storing absolute value
+	* Storing just the integer part of any number anytime.
+	* 16 bits will let us store values from -65535 to 65535
+	* During the intermediate calculations, values ~1500 were seen, still we are using a number system which can safely handle numbers of "Third Case".
+
+2. Values of sine and cosine for twiddle factor. Since sines and cosines are <=1, we have stored sines and cosines by multiplying it with 2**15.
+
+3. All the multiplications involved in whole process are either with sine or with cosine, so after the multiplication (which generated 30+1 bit number), we are dividing it by 2**15, giving us back 16 bit number which can be safely stored in our number system.
+
+4. File description:
+	* adder.v : module adder (a,b,c);

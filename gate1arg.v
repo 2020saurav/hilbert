@@ -3,12 +3,12 @@ module main;
 	reg x=0;
 	reg y=0;
 	reg data[0:800];
-	reg clk=0;
+	//reg clk=0;
 
 	wire z;
 	gate1 dut (x,y,z);
 
-	always #10 clk = ~clk;
+	//always #10 clk = ~clk;
 	integer i;
 
 	initial begin

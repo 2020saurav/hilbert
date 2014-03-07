@@ -1,0 +1,1 @@
+iverilog -o test butterfly.v adder.v multiplier.v

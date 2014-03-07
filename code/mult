@@ -1,0 +1,112 @@
+#! /usr/bin/vvp
+:ivl_version "0.9.5 " "(v0_9_5)";
+:vpi_time_precision + 0;
+:vpi_module "system";
+:vpi_module "v2005_math";
+:vpi_module "va_math";
+S_0x94c820 .scope module, "multiplier_tb" "multiplier_tb" 2 1;
+ .timescale 0 0;
+v0x984de0_0 .var "a", 9 0;
+v0x984e80_0 .var "b", 9 0;
+v0x984f30_0 .net "c", 9 0, v0x984980_0; 1 drivers
+v0x984fe0 .array "data", 100 0, 9 0;
+v0x985090_0 .var/i "i", 31 0;
+S_0x94c520 .scope module, "mul1" "multiplier" 2 12, 3 1, S_0x94c820;
+ .timescale 0 0;
+v0x94cfe0_0 .net "a", 9 0, v0x984de0_0; 1 drivers
+v0x9848e0_0 .net "b", 9 0, v0x984e80_0; 1 drivers
+v0x984980_0 .var "c", 9 0;
+v0x984a20_0 .net "signa", 0 0, L_0x985320; 1 drivers
+v0x984ad0_0 .net "signb", 0 0, L_0x9853c0; 1 drivers
+v0x984b70_0 .var "temp", 17 0;
+v0x984c50_0 .net "vala", 8 0, L_0x985110; 1 drivers
+v0x984cf0_0 .net "valb", 8 0, L_0x985230; 1 drivers
+E_0x94e0c0/0 .event edge, v0x984a20_0, v0x984ad0_0, v0x984c50_0, v0x984cf0_0;
+E_0x94e0c0/1 .event edge, v0x984b70_0;
+E_0x94e0c0 .event/or E_0x94e0c0/0, E_0x94e0c0/1;
+L_0x985110 .part v0x984de0_0, 0, 9;
+L_0x985230 .part v0x984e80_0, 0, 9;
+L_0x985320 .part v0x984de0_0, 9, 1;
+L_0x9853c0 .part v0x984e80_0, 9, 1;
+    .scope S_0x94c520;
+T_0 ;
+    %wait E_0x94e0c0;
+    %load/v 8, v0x984a20_0, 1;
+    %load/v 9, v0x984ad0_0, 1;
+    %cmp/u 8, 9, 1;
+    %jmp/0xz  T_0.0, 4;
+    %load/v 8, v0x984c50_0, 9;
+    %movi 17, 0, 9;
+    %load/v 26, v0x984cf0_0, 9;
+    %movi 35, 0, 9;
+    %mul 8, 26, 18;
+    %ix/load 0, 18, 0;
+    %assign/v0 v0x984b70_0, 0, 8;
+    %ix/load 1, 9, 0;
+    %mov 4, 0, 1;
+    %jmp/1 T_0.2, 4;
+    %load/x1p 18, v0x984b70_0, 9;
+    %jmp T_0.3;
+T_0.2 ;
+    %mov 18, 2, 9;
+T_0.3 ;
+    %mov 8, 18, 9; Move signal select into place
+    %mov 17, 0, 1;
+    %ix/load 0, 10, 0;
+    %assign/v0 v0x984980_0, 0, 8;
+    %jmp T_0.1;
+T_0.0 ;
+    %load/v 8, v0x984c50_0, 9;
+    %movi 17, 0, 9;
+    %load/v 26, v0x984cf0_0, 9;
+    %movi 35, 0, 9;
+    %mul 8, 26, 18;
+    %ix/load 0, 18, 0;
+    %assign/v0 v0x984b70_0, 0, 8;
+    %ix/load 1, 9, 0;
+    %mov 4, 0, 1;
+    %jmp/1 T_0.4, 4;
+    %load/x1p 18, v0x984b70_0, 9;
+    %jmp T_0.5;
+T_0.4 ;
+    %mov 18, 2, 9;
+T_0.5 ;
+    %mov 8, 18, 9; Move signal select into place
+    %mov 17, 1, 1;
+    %ix/load 0, 10, 0;
+    %assign/v0 v0x984980_0, 0, 8;
+T_0.1 ;
+    %jmp T_0;
+    .thread T_0, $push;
+    .scope S_0x94c820;
+T_1 ;
+    %vpi_call 2 18 "$readmemb", "mult.bin", v0x984fe0;
+    %set/v v0x985090_0, 0, 32;
+T_1.0 ;
+    %load/v 8, v0x985090_0, 32;
+   %cmpi/s 8, 10, 32;
+    %jmp/0xz T_1.1, 5;
+    %ix/getv/s 3, v0x985090_0;
+    %load/av 8, v0x984fe0, 10;
+    %set/v v0x984de0_0, 8, 10;
+    %ix/load 0, 1, 0;
+    %load/vp0/s 18, v0x985090_0, 32;
+    %ix/get/s 3, 18, 32;
+    %load/av 8, v0x984fe0, 10;
+    %set/v v0x984e80_0, 8, 10;
+    %delay 100, 0;
+    %vpi_call 2 25 "$display", "%0d:%0d, %0d:%0d, %0d:%0d", &PV<v0x984de0_0, 9, 1>, &PV<v0x984de0_0, 0, 9>, &PV<v0x984e80_0, 9, 1>, &PV<v0x984e80_0, 0, 9>, &PV<v0x984f30_0, 9, 1>, &PV<v0x984f30_0, 0, 9>;
+    %ix/load 0, 2, 0;
+    %load/vp0/s 8, v0x985090_0, 32;
+    %set/v v0x985090_0, 8, 32;
+    %jmp T_1.0;
+T_1.1 ;
+    %vpi_call 2 27 "$finish";
+    %end;
+    .thread T_1;
+# The file index is used to find the file name in the following table.
+:file_names 4;
+    "N/A";
+    "<interactive>";
+    "multiplier_tb.v";
+    "multiplier.v";
